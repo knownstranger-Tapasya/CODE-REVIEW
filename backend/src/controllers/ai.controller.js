@@ -1,18 +1,22 @@
-const aiService = require ("../services/ai.service")
+const aiService = require("../services/ai.service");
 
-// module.exports.getResponse = async (req,res)=>{
-module.exports.getReview = async (req,res)=>{
-
-    // const prompt = req.query.prompt;
+module.exports.getReview = async (req, res) => {
     const code = req.body.code;
 
-    // if(!prompt){
-    if(!code){
-        return res.status(400).send("Prompt is required");
+    // Check if 'code' is provided
+    if (!code) {
+        return res.status(400).json({ error: "Code is required" });
     }
 
-    // const response = await aiService(prompt);
-    const response = await aiService(code);
+    try {
+        // Calling the aiService with the provided code
+        const response = await aiService(code);
 
-    res.send(response);
-}
+        // Sending the response back to the client
+        res.status(200).json({ success: true, data: response });
+    } catch (error) {
+        // Handling errors from aiService or any other unforeseen errors
+        console.error('Error while processing the review:', error);
+        res.status(500).json({ error: 'An error occurred while processing the review.' });
+    }
+};
