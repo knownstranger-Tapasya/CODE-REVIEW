@@ -21,9 +21,15 @@ function App() {
   }, [])
 
   async function reviewCode() {
-    const response = await axios.post('http://localhost:3000/ai/get-review', { code })
-    setReview(response.data)
+    try {
+      const response = await axios.post('https://code-review-16za.onrender.com/ai/get-review', { code });
+      setReview(response.data);
+    } catch (error) {
+      setReview("❌ Error contacting the backend. Please try again later.");
+      console.error(error);
+    }
   }
+  
 
   return (
     <>
